@@ -1,0 +1,620 @@
+/* Global Styles & Variables */
+:root {
+    --primary-green: #00ff00;
+    --dark-background: #0a0a0a;
+    --light-black: #1a1a1a;
+    --text-color: #e0e0e0;
+    --glow-color: #00ff00;
+    --border-color: #008800;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu Mono', monospace; /* Primary content font */
+    background-color: var(--dark-background);
+    color: var(--text-color);
+    overflow: hidden; /* Prevent scrollbars from content overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    perspective: 1000px; /* For 3D transformations */
+    position: relative;
+}
+
+/* Glitch Effect */
+body.glitch {
+    animation: glitch-anim 0.2s infinite alternate;
+}
+
+@keyframes glitch-anim {
+    0% {
+        text-shadow: 0.05em 0 0 rgba(0, 255, 0, 0.75), -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    14% {
+        text-shadow: 0.05em 0 0 rgba(0, 255, 0, 0.75), -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    15% {
+        text-shadow: -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), -0.05em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    49% {
+        text-shadow: -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), -0.05em 0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    50% {
+        text-shadow: 0.025em 0.05em 0 rgba(0, 255, 0, 0.75), 0.05em 0 0 rgba(255, 0, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    99% {
+        text-shadow: 0.025em 0.05em 0 rgba(0, 255, 0, 0.75), 0.05em 0 0 rgba(255, 0, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+    100% {
+        text-shadow: -0.025em 0 0 rgba(0, 255, 0, 0.75), -0.025em -0.025em 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+    }
+}
+
+/* Binary Background */
+.binary-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-background);
+    color: var(--primary-green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px; /* Adjust for density */
+    line-height: 1.2;
+    white-space: pre;
+    overflow: hidden;
+    z-index: -2; /* Ensure it's behind everything */
+    opacity: 0.1; /* Even more subtle background */
+    text-shadow: 0 0 5px var(--glow-color); /* Add glow */
+}
+
+/* Container for the cube and controls */
+.container {
+    position: relative;
+    z-index: 1; /* Above the binary background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Use min-height to allow content to push height */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Cube Container */
+.cube-container {
+    width: 350px; /* Slightly bigger base size */
+    height: 350px;
+    position: relative;
+    transform-style: preserve-3d;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.8s ease-in-out; /* Smooth rotation */
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5); /* Outer glow for the cube */
+    border-radius: 10px; /* Subtle rounded corners for the container */
+}
+
+/* Cube itself */
+.cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out; /* Smooth rotation */
+}
+
+/* Individual faces of the cube */
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.9); /* Semi-transparent dark background */
+    border: 2px solid var(--primary-green);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    box-shadow: 0 0 15px var(--glow-color) inset, 0 0 15px var(--glow-color); /* Inner and outer glow */
+    border-radius: 8px; /* Rounded corners for faces */
+    overflow: hidden; /* Hide overflowing content */
+}
+
+/* Face transformations */
+/* Adjust translateZ for the new cube size (350px / 2 = 175px) */
+.front { transform: rotateY(0deg) translateZ(175px); }
+.back { transform: rotateY(180deg) translateZ(175px); }
+.right { transform: rotateY(90deg) translateZ(175px); }
+.left { transform: rotateY(-90deg) translateZ(175px); }
+.top { transform: rotateX(90deg) translateZ(175px); }
+.bottom { transform: rotateX(-90deg) translateZ(175px); }
+
+/* Content within faces */
+.content {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-y: auto; /* Enable scrolling for overflowing content */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+/* Custom scrollbar for content */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+.content::-webkit-scrollbar-track {
+    background: var(--light-black);
+    border-radius: 3px;
+}
+.content::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    border-radius: 3px;
+    box-shadow: 0 0 5px var(--glow-color);
+}
+
+
+h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2.8rem;
+    color: var(--primary-green);
+    text-shadow: 0 0 10px var(--glow-color);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    margin-top: 5px;
+}
+
+h2 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2rem;
+    color: var(--primary-green);
+    text-shadow: 0 0 8px var(--glow-color);
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 5px;
+}
+h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-green);
+    box-shadow: 0 0 5px var(--glow-color);
+}
+
+p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Education & Experience Timeline */
+.timeline {
+    width: 90%;
+    max-height: 250px; /* Increased max-height to allow more content and scrolling */
+    overflow-y: auto;
+    padding-right: 10px; /* Space for scrollbar */
+    text-align: left;
+}
+.event {
+    margin-bottom: 15px;
+    padding-left: 15px;
+    position: relative;
+    border-left: 2px solid var(--primary-green);
+}
+.event::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--glow-color);
+}
+.event h3 {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+.event p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* Skills Grid */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    width: 90%;
+    max-height: 250px; /* Increased max-height for scrolling */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.skill-category {
+    background-color: var(--dark-background);
+    border: 1px dashed var(--border-color);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+}
+.skill-category h3 {
+    color: var(--primary-green);
+    font-size: 1rem;
+    margin-bottom: 8px;
+    text-shadow: 0 0 3px var(--glow-color);
+}
+.skill-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.skill-category li {
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+    color: var(--text-color);
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column for projects */
+    gap: 15px;
+    width: 90%;
+    max-height: 250px; /* Increased max-height for scrolling */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.project {
+    background-color: var(--dark-background);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+    text-align: left;
+}
+.project h3 {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    text-shadow: 0 0 3px var(--glow-color);
+}
+.project p {
+    font-size: 0.85rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* About Me */
+.about-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 90%;
+    max-height: 250px; /* Increased max-height for scrolling */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-green);
+    box-shadow: 0 0 15px var(--glow-color);
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 90%;
+    max-height: 250px; /* Increased max-height for scrolling */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+.contact-info i {
+    color: var(--primary-green);
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px var(--glow-color);
+}
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+.social-links a {
+    color: var(--primary-green);
+    font-size: 1.8rem;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    text-shadow: 0 0 8px var(--glow-color);
+}
+.social-links a:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 15px var(--primary-green);
+}
+
+/* Navigation Controls (for cube rotation) */
+.controls {
+    position: fixed;
+    bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+}
+
+.controls button {
+    background-color: var(--primary-green);
+    color: var(--dark-background);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--glow-color);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.controls button:hover {
+    background-color: #00cc00;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 20px var(--glow-color);
+}
+.controls button i {
+    text-shadow: none; /* Remove glitch effect from icons */
+}
+
+.nav-dots {
+    display: flex;
+    gap: 10px;
+}
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(0, 255, 0, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid var(--primary-green);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.dot.active {
+    background-color: var(--primary-green);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+/* Side Navigation Menu */
+.side-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(10, 10, 10, 0.8);
+    border: 2px solid var(--primary-green);
+    border-radius: 10px;
+    padding: 15px 10px;
+    box-shadow: 0 0 20px var(--glow-color);
+    display: flex; /* Use flexbox for vertical alignment */
+    flex-direction: column;
+    gap: 10px; /* Space between links */
+}
+
+.side-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.side-nav .nav-link {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+    border: 1px solid transparent; /* For hover effect */
+}
+
+.side-nav .nav-link:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: var(--primary-green);
+    text-shadow: 0 0 8px var(--glow-color);
+    border: 1px solid var(--primary-green);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cube-container {
+        width: 320px; /* Adjusted for smaller screens */
+        height: 320px;
+    }
+    .front, .back, .right, .left, .top, .bottom {
+        transform: rotateY(0deg) translateZ(160px); /* Adjust translateZ */
+    }
+    .back { transform: rotateY(180deg) translateZ(160px); }
+    .right { transform: rotateY(90deg) translateZ(160px); }
+    .left { transform: rotateY(-90deg) translateZ(160px); }
+    .top { transform: rotateX(90deg) translateZ(160px); }
+    .bottom { transform: rotateX(-90deg) translateZ(160px); }
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.8rem; }
+    .content { padding: 15px; }
+}
+
+@media (max-width: 992px) {
+    .cube-container {
+        width: 280px;
+        height: 280px;
+    }
+    .front, .back, .right, .left, .top, .bottom {
+        transform: rotateY(0deg) translateZ(140px); /* Adjust translateZ */
+    }
+    .back { transform: rotateY(180deg) translateZ(140px); }
+    .right { transform: rotateY(90deg) translateZ(140px); }
+    .left { transform: rotateY(-90deg) translateZ(140px); }
+    .top { transform: rotateX(90deg) translateZ(140px); }
+    .bottom { transform: rotateX(-90deg) translateZ(140px); }
+
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.6rem; }
+    .content { padding: 12px; }
+    .timeline, .skills-grid, .projects-grid, .about-content, .contact-info {
+        max-height: 200px; /* Adjusted for smaller cube */
+    }
+    .side-nav {
+        right: 10px;
+        padding: 10px 5px;
+        gap: 8px;
+    }
+    .side-nav .nav-link {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile-specific cube behavior: faces stack and transition opacity */
+    .cube-container {
+        width: 90%; /* Take more width */
+        max-width: 350px; /* Max width for larger mobiles */
+        height: auto;
+        aspect-ratio: 1/1; /* Maintain square aspect ratio */
+        margin: 20px auto;
+        transform: none !important; /* Disable 3D rotation on mobile */
+        box-shadow: none; /* Remove outer cube shadow */
+        border-radius: 0;
+    }
+
+    .cube {
+        transform-style: flat; /* Disable 3D transform on cube itself */
+        height: 100%;
+        width: 100%;
+    }
+
+    .face {
+        position: absolute; /* Stack faces */
+        width: 100%;
+        height: 100%;
+        opacity: 0; /* Hidden by default */
+        transition: opacity 0.5s ease-in-out;
+        display: flex; /* Ensure content is centered */
+        z-index: 0; /* Default z-index */
+        transform: none !important; /* Reset any 3D transforms */
+    }
+
+    .face.active {
+        opacity: 1; /* Only active face is visible */
+        z-index: 1; /* Bring active face to front */
+    }
+
+    .controls {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        justify-content: center;
+    }
+    .controls button {
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    .tagline { font-size: 1rem; }
+    .content { padding: 10px; }
+    .profile-img { width: 100px; height: 100px; }
+    .timeline, .skills-grid, .projects-grid, .about-content, .contact-info {
+        max-height: 150px; /* Further reduce height for mobile */
+        font-size: 0.9rem;
+    }
+    .event h3, .project h3, .skill-category h3 { font-size: 1rem; }
+    .event p, .project p, .skill-category li { font-size: 0.8rem; }
+
+    /* Hide side navigation on smaller screens to avoid clutter */
+    .side-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 { font-size: 1.8rem; margin-bottom: 5px; }
+    h2 { font-size: 1.3rem; margin-bottom: 15px; }
+    .tagline { font-size: 0.9rem; }
+    .content { padding: 8px; }
+    .controls { bottom: 10px; gap: 10px; }
+    .controls button { padding: 8px 12px; font-size: 0.9rem; }
+    .dot { width: 8px; height: 8px; }
+    .profile-img { width: 80px; height: 80px; }
+    .timeline, .skills-grid, .projects-grid, .about-content, .contact-info {
+        max-height: 120px; /* Even smaller height for small mobiles */
+    }
+}
+
+/* Mobile landscape orientation */
+@media (max-height: 500px) and (max-width: 768px) {
+    .cube-container {
+        max-width: 300px;
+        margin: 10px auto;
+    }
+    .controls {
+        bottom: 5px;
+        gap: 8px;
+    }
+    .content {
+        padding: 5px;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 5px; }
+    h2 { font-size: 1.2rem; margin-bottom: 10px; }
+    .tagline { font-size: 0.8rem; }
+    .timeline, .skills-grid, .projects-grid, .about-content, .contact-info {
+        max-height: 90px; /* Very small height for landscape */
+        font-size: 0.75rem;
+    }
+    .event h3, .project h3, .skill-category h3 { font-size: 0.9rem; }
+    .event p, .project p, .skill-category li { font-size: 0.7rem; }
+}
